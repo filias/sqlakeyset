@@ -756,9 +756,9 @@ def test_orm_custom_session_bind(dburl):
 
 def test_multiple_engines(dburl, joined_inheritance_dburl):
 
-    eng = sqlalchemy.create_engine(dburl)
-    eng2 = sqlalchemy.create_engine(joined_inheritance_dburl)
-    session_factory = sessionmaker(bind=eng)
+    eng = sqlalchemy.create_engine(dburl, future=True)
+    eng2 = sqlalchemy.create_engine(joined_inheritance_dburl, future=True)
+    session_factory = sessionmaker(bind=eng, future=True)
     JoinedInheritanceBase.metadata.bind = eng2
 
     s = session_factory()
