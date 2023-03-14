@@ -21,7 +21,7 @@ from sqlalchemy import (
 )
 
 from sqlakeyset.sqla import SQLA_VERSION
-if SQLA_VERSION >= version.parse("2.0"):
+if SQLA_VERSION >= version.parse("1.4"):
     from sqlalchemy.orm import declarative_base
 else:
     from sqlalchemy.ext.declarative import declarative_base
