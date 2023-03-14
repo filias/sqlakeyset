@@ -166,7 +166,7 @@ class Author(Base):
     @book_count.expression
     def book_count(cls):
         return (
-            select([func.count(Book.id)])
+            select(func.count(Book.id))
             .where(Book.author_id == cls.id)
             .label("book_count")
         )
@@ -623,18 +623,18 @@ def test_core(dburl):
 
 def test_core2(dburl):
     with S(dburl, echo=ECHO) as s:
-        sel = select([Book.score]).order_by(Book.id)
+        sel = select(Book.score).order_by(Book.id)
         check_paging_core(sel, s)
 
         sel = (
-            select([Book.score])
+            select(Book.score)
             .order_by(Author.id - Book.id, Book.id)
             .where(Author.id == Book.author_id)
         )
         check_paging_core(sel, s)
 
         sel = (
-            select([Book.author_id, func.count()])
+            select(Book.author_id, func.count())
             .group_by(Book.author_id)
             .order_by(func.sum(Book.popularity))
         )
@@ -642,7 +642,7 @@ def test_core2(dburl):
 
         v = func.sum(func.coalesce(Book.a, 0)) + func.min(Book.b)
         sel = (
-            select([Book.author_id, func.count(), v])
+            select(Book.author_id, func.count(), v)
             .group_by(Book.author_id)
             .order_by(v)
         )
@@ -651,7 +651,7 @@ def test_core2(dburl):
 
 def test_core_enum(dburl):
     with S(dburl, echo=ECHO) as s:
-        selectable = select([Light.id, Light.colour]).order_by(
+        selectable = select(Light.id, Light.colour).order_by(
             Light.intensity, Light.id
         )
         check_paging_core(selectable=selectable, s=s)
@@ -664,7 +664,7 @@ def test_core_enum(dburl):
 # order (as recommended by the MySQL documentation).
 def test_core_order_by_enum(no_mysql_dburl):
     with S(no_mysql_dburl, echo=ECHO) as s:
-        selectable = select([Light.id, Light.colour]).order_by(
+        selectable = select(Light.id, Light.colour).order_by(
             Light.colour, Light.intensity, Light.id
         )
         check_paging_core(selectable=selectable, s=s)
@@ -672,13 +672,13 @@ def test_core_order_by_enum(no_mysql_dburl):
 
 def test_core_result_processor(dburl):
     with S(dburl, echo=ECHO) as s:
-        selectable = select([Light.id, Light.myint]).order_by(Light.intensity, Light.id)
+        selectable = select(Light.id, Light.myint).order_by(Light.intensity, Light.id)
         check_paging_core(selectable=selectable, s=s)
 
 
 def test_core_order_by_result_processor(dburl):
     with S(dburl, echo=ECHO) as s:
-        selectable = select([Light.id]).order_by(Light.myint, Light.id)
+        selectable = select(Light.id).order_by(Light.myint, Light.id)
         check_paging_core(selectable=selectable, s=s)
 
 
