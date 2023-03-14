@@ -468,7 +468,10 @@ def test_orm_column_property(dburl):
 def test_column_named_info(dburl):
     # See issue djrobstep#24
     with S(dburl, echo=ECHO) as s:
-        q = s.query(Author).from_self().order_by(Author.info, Author.id)
+        aa1 = aliased(Author)
+        aa2 = aliased(Author)
+        q = s.query(aa2).select_from(aa1).join(aa2, aa2.id == aa1.id).order_by(aa1.info, aa1.id)
+
         check_paging_orm(q=q)
 
 
