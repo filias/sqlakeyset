@@ -761,8 +761,7 @@ def test_multiple_engines(dburl, joined_inheritance_dburl):
 
     eng = sqlalchemy.create_engine(dburl)
     eng2 = sqlalchemy.create_engine(joined_inheritance_dburl)
-    session_factory = sessionmaker()
-    Base.metadata.bind = eng
+    session_factory = sessionmaker(bind=eng)
     JoinedInheritanceBase.metadata.bind = eng2
 
     s = session_factory()
