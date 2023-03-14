@@ -604,14 +604,8 @@ def test_orm_joined_inheritance(joined_inheritance_dburl):
 
 
 def test_core(dburl):
-    spec = ["b", "d", "book_id", "c"]
-
-    cols = [column(each) for each in spec]
-    ob = [OC(x).uo for x in spec]
-
-    selectable = select(
-        cols, from_obj=[table("t_Book")], whereclause=column("d") == 99, order_by=ob
-    )
+    selectable = select(Book.b, Book.d, Book.id, Book.c).where(Book.d == 99)\
+        .order_by(Book.b, Book.d, Book.id, Book.c)
 
     with S(dburl, echo=ECHO) as s:
         check_paging_core(selectable=selectable, s=s)
